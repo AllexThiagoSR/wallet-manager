@@ -9,6 +9,8 @@ class WalletForm extends Component {
     value: '0',
     description: '',
     currency: 'USD',
+    paymentMethod: 'Dinheiro',
+    category: 'Alimentação',
   };
 
   handleChange = ({ target: { value, name } }) => this.setState({
@@ -16,7 +18,7 @@ class WalletForm extends Component {
   });
 
   render() {
-    const { value, description, currency } = this.state;
+    const { value, description, currency, paymentMethod, category } = this.state;
     const { currencies } = this.props;
     return (
       <form>
@@ -45,6 +47,24 @@ class WalletForm extends Component {
           value={ currency }
           name="currency"
           id="currency-input"
+          onChange={ this.handleChange }
+        />
+        <FilledSelect
+          label="Método de pagamento:"
+          testid="method-input"
+          options={ ['Dinheiro', 'Cartão de crédito', 'Cartão de débito'] }
+          value={ paymentMethod }
+          name="paymentMethod"
+          id="method-input"
+          onChange={ this.handleChange }
+        />
+        <FilledSelect
+          label="Categoria:"
+          testid="tag-input"
+          options={ ['Alimentação', 'Lazer', 'Trabalho', 'Transporte', 'Saúde'] }
+          value={ category }
+          name="category"
+          id="tag-input"
           onChange={ this.handleChange }
         />
         <button>Adicionar Despesa</button>
