@@ -5,13 +5,16 @@ import FilledSelect from './FilledSelect';
 import Input from './Input';
 import { saveExpense } from '../redux/actions';
 
+const methods = ['Dinheiro', 'Cartão de crédito', 'Cartão de débito'];
+const tags = ['Alimentação', 'Lazer', 'Trabalho', 'Transporte', 'Saúde'];
+
 class WalletForm extends Component {
   state = {
-    value: '0',
+    value: '',
     description: '',
     currency: 'USD',
-    method: 'Dinheiro',
-    tag: 'Alimentação',
+    method: methods[0],
+    tag: tags[0],
   };
 
   handleChange = ({ target: { value, name } }) => this.setState({
@@ -21,7 +24,18 @@ class WalletForm extends Component {
   handleSubmit = (e) => {
     e.preventDefault();
     const { expenses, dispatch } = this.props;
-    dispatch(saveExpense({ id: expenses.length, ...this.state }));
+
+    dispatch(saveExpense({
+      id: expenses.length,
+      ...this.state,
+    }));
+    this.setState({
+      value: '',
+      description: '',
+      currency: 'USD',
+      method: methods[0],
+      tag: tags[0],
+    });
   };
 
   render() {
@@ -61,18 +75,18 @@ class WalletForm extends Component {
         <FilledSelect
           label="Método de pagamento:"
           testid="method-input"
-          options={ ['Dinheiro', 'Cartão de crédito', 'Cartão de débito'] }
+          options={ methods }
           value={ method }
-          name="paymentMethod"
+          name="method"
           id="method-input"
           onChange={ this.handleChange }
         />
         <FilledSelect
           label="Categoria:"
           testid="tag-input"
-          options={ ['Alimentação', 'Lazer', 'Trabalho', 'Transporte', 'Saúde'] }
+          options={ tags }
           value={ tag }
-          name="category"
+          name="tag"
           id="tag-input"
           onChange={ this.handleChange }
         />

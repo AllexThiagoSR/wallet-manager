@@ -7,7 +7,6 @@ const INITIALS_STATE = {
 
 export default function walletReducer(state = INITIALS_STATE, action) {
   const { payload } = action;
-  console.log(state, payload);
   switch (action.type) {
   case 'SAVE_CURRENCIES':
     return { ...state, ...payload };

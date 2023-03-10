@@ -29,9 +29,6 @@ const addExpenseAction = (expense) => ({
 });
 
 export const saveExpense = (expense) => async (dispatch) => {
-  const currencies = await (await fetch('https://economia.awesomeapi.com.br/json/all')).json();
-  const exchangesRates = Object
-    .values(currencies)
-    .filter(({ code, codein }) => code !== 'USDT' && codein !== 'BRLT');
-  dispatch(addExpenseAction({ ...expense, exchangesRates }));
+  const exchangeRates = await (await fetch('https://economia.awesomeapi.com.br/json/all')).json();
+  dispatch(addExpenseAction({ ...expense, exchangeRates }));
 };
