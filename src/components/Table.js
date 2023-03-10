@@ -25,8 +25,8 @@ class Table extends Component {
           </thead>
           <tbody>
             {
-              expenses.map((expense, index) => (
-                <TableRowFilled key={ index } { ... expense } />
+              expenses.map((expense) => (
+                <TableRowFilled key={ expense.id } { ... expense } />
               ))
             }
           </tbody>

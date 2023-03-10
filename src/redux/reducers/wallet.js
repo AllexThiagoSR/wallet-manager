@@ -12,6 +12,10 @@ export default function walletReducer(state = INITIALS_STATE, action) {
     return { ...state, ...payload };
   case 'ADD_EXPENSE':
     return { ...state, expenses: [...state.expenses, payload.expense] };
+  case 'DELETE_EXPENSE': {
+    const { expenses } = state;
+    return { ...state, expenses: expenses.filter(({ id }) => id !== payload.id) };
+  }
   default:
     return state;
   }

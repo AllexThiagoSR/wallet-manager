@@ -32,3 +32,8 @@ export const saveExpense = (expense) => async (dispatch) => {
   const exchangeRates = await (await fetch('https://economia.awesomeapi.com.br/json/all')).json();
   dispatch(addExpenseAction({ ...expense, exchangeRates }));
 };
+
+export const deleteExpense = (id) => ({
+  type: 'DELETE_EXPENSE',
+  payload: { id },
+});
