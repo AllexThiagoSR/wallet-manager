@@ -21,6 +21,14 @@ class WalletForm extends Component {
     [name]: value,
   });
 
+  reset = () => this.setState({
+    value: '',
+    description: '',
+    currency: 'USD',
+    method: methods[0],
+    tag: tags[0],
+  });
+
   handleSubmit = (e) => {
     e.preventDefault();
     const { expenses, dispatch } = this.props;
@@ -29,13 +37,7 @@ class WalletForm extends Component {
       id: expenses.length,
       ...this.state,
     }));
-    this.setState({
-      value: '',
-      description: '',
-      currency: 'USD',
-      method: methods[0],
-      tag: tags[0],
-    });
+    this.reset();
   };
 
   render() {

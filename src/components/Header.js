@@ -12,7 +12,11 @@ class Header extends Component {
     return (
       <header>
         <p data-testid="email-field">{ email }</p>
-        <p data-testid="total-field">{ `R$ ${totalValue.toFixed(2)}` }</p>
+        <p>
+          R$
+          {' '}
+          <span data-testid="total-field">{ totalValue.toFixed(2) }</span>
+        </p>
         <p data-testid="header-currency-field">BRL</p>
       </header>
     );
