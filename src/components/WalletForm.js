@@ -1,14 +1,23 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import FilledSelect from './FilledSelect';
 import Input from './Input';
 
 class WalletForm extends Component {
   state = {
     value: '0',
     description: '',
+    currency: 'USD',
   };
 
+  handleChange = ({ target: { value, name } }) => this.setState({
+    [name]: value,
+  });
+
   render() {
-    const { value, description } = this.state;
+    const { value, description, currency } = this.state;
+    const { currencies } = this.props;
     return (
       <form>
         <Input
@@ -18,6 +27,7 @@ class WalletForm extends Component {
           id="value-input"
           name="value"
           label="Valor:"
+          onChange={ this.handleChange }
         />
         <Input
           label="Descrição:"
@@ -26,10 +36,29 @@ class WalletForm extends Component {
           value={ description }
           id="description-input"
           name="description"
+          onChange={ this.handleChange }
         />
+        <FilledSelect
+          label="Moeda:"
+          testid="currency-input"
+          options={ currencies }
+          value={ currency }
+          name="currency"
+          id="currency-input"
+          onChange={ this.handleChange }
+        />
+        <button>Adicionar Despesa</button>
       </form>
     );
   }
 }
 
-export default WalletForm;
+const mapStateToProps = ({ wallet: { currencies } }) => ({
+  currencies,
+});
+
+WalletForm.propTypes = {
+  currencies: PropTypes.arrayOf(PropTypes.string).isRequired,
+};
+
+export default connect(mapStateToProps)(WalletForm);
