@@ -16,6 +16,8 @@ export default function walletReducer(state = INITIALS_STATE, action) {
     const { expenses } = state;
     return { ...state, expenses: expenses.filter(({ id }) => id !== payload.id) };
   }
+  case 'START_EDITION':
+    return { ...state, ...payload };
   default:
     return state;
   }

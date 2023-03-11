@@ -1,12 +1,18 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { deleteExpense } from '../redux/actions';
+import { deleteExpense, startExpenseEdition, sendInfosToEdit } from '../redux/actions';
 
 class TableRowFilled extends Component {
   deleteExpenseByID = (id) => {
     const { dispatch } = this.props;
     dispatch(deleteExpense(id));
+  };
+
+  chooseExpenseToEdit = (id) => {
+    const { dispatch, value, description, currency, method, tag } = this.props;
+    dispatch(startExpenseEdition(id));
+    dispatch(sendInfosToEdit({ value, description, currency, method, tag }));
   };
 
   render() {
@@ -20,10 +26,16 @@ class TableRowFilled extends Component {
         <td>{ parseFloat(value).toFixed(2) }</td>
         <td>{ exchangeRates[currency].name }</td>
         <td>{ parseFloat(exchangeRates[currency].ask).toFixed(2) }</td>
-        <td>{ convertedValue }</td>
+        <td>{ convertedValue.toFixed(2) }</td>
         <td>BRL</td>
         <td>
-          <button value={ id }>Editar</button>
+          <button
+            value={ id }
+            data-testid="edit-btn"
+            onClick={ () => this.chooseExpenseToEdit(id) }
+          >
+            Editar
+          </button>
           <button
             value={ id }
             data-testid="delete-btn"

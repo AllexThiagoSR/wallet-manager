@@ -42,7 +42,7 @@ class WalletForm extends Component {
 
   render() {
     const { value, description, currency, method, tag } = this.state;
-    const { currencies } = this.props;
+    const { currencies, editor } = this.props;
     return (
       <form
         onSubmit={ this.handleSubmit }
@@ -92,15 +92,24 @@ class WalletForm extends Component {
           id="tag-input"
           onChange={ this.handleChange }
         />
-        <button>Adicionar Despesa</button>
+        {
+          !editor ? <button>Adicionar Despesa</button> : (
+            <button
+              type="button"
+            >
+              Editar despesa
+            </button>
+          )
+        }
       </form>
     );
   }
 }
 
-const mapStateToProps = ({ wallet: { currencies, expenses } }) => ({
+const mapStateToProps = ({ wallet: { currencies, expenses, editor } }) => ({
   currencies,
   expenses,
+  editor,
 });
 
 WalletForm.propTypes = {
@@ -114,6 +123,7 @@ WalletForm.propTypes = {
     method: PropTypes.string,
     tag: PropTypes.string,
   })).isRequired,
+  editor: PropTypes.bool.isRequired,
 };
 
 export default connect(mapStateToProps)(WalletForm);

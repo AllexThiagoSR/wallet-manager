@@ -37,3 +37,16 @@ export const deleteExpense = (id) => ({
   type: 'DELETE_EXPENSE',
   payload: { id },
 });
+
+export const startExpenseEdition = (idToEdit) => ({
+  type: 'START_EDITION',
+  payload: {
+    idToEdit,
+    editor: true,
+  },
+});
+
+export const sendInfosToEdit = (expenseInfos) => ({
+  type: 'SEND_INFOS_TO_EDIT',
+  payload: expenseInfos,
+});
