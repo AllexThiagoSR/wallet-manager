@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import FilledSelect from './FilledSelect';
 import Input from './Input';
-import { saveExpense } from '../redux/actions';
+import { finnishExpenseEdition, saveExpense } from '../redux/actions';
 
 const methods = ['Dinheiro', 'Cartão de crédito', 'Cartão de débito'];
 const tags = ['Alimentação', 'Lazer', 'Trabalho', 'Transporte', 'Saúde'];
@@ -15,13 +15,15 @@ class WalletForm extends Component {
     currency: 'USD',
     method: methods[0],
     tag: tags[0],
+    first: true,
   };
 
   componentDidUpdate(_prevProps, prevState) {
     const { edit, editor } = this.props;
-    if (!this.checkObjectEquality(prevState, edit) && editor) {
+    if (!this.checkObjectEquality(prevState, edit) && editor && prevState.first) {
       this.setState({
         ...edit,
+        first: false,
       });
     }
   }
@@ -42,16 +44,31 @@ class WalletForm extends Component {
     currency: 'USD',
     method: methods[0],
     tag: tags[0],
+    first: true,
   });
 
   handleSubmit = (e) => {
     e.preventDefault();
     const { expenses, dispatch } = this.props;
+    const { value, description, currency, method, tag } = this.state;
 
     dispatch(saveExpense({
       id: expenses.length,
-      ...this.state,
+      value,
+      description,
+      currency,
+      method,
+      tag,
     }));
+    this.reset();
+  };
+
+  handleSubmitExpenseEdition = (e) => {
+    e.preventDefault();
+    const { dispatch } = this.props;
+    const { value, description, currency, method, tag } = this.state;
+    dispatch(finnishExpenseEdition({ value, description, currency, method, tag }));
+    this.setState({ first: true });
     this.reset();
   };
 
@@ -111,6 +128,7 @@ class WalletForm extends Component {
           !editor ? <button>Adicionar Despesa</button> : (
             <button
               type="button"
+              onClick={ this.handleSubmitExpenseEdition }
             >
               Editar despesa
             </button>

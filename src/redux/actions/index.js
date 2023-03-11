@@ -46,6 +46,14 @@ export const startExpenseEdition = (idToEdit) => ({
   },
 });
 
+export const finnishExpenseEdition = (newInfos) => ({
+  type: 'FINNISH_EXPENSE_EDITION',
+  payload: {
+    newInfos,
+    editor: false,
+  },
+});
+
 export const sendInfosToEdit = (expenseInfos) => ({
   type: 'SEND_INFOS_TO_EDIT',
   payload: expenseInfos,

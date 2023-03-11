@@ -18,6 +18,15 @@ export default function walletReducer(state = INITIALS_STATE, action) {
   }
   case 'START_EDITION':
     return { ...state, ...payload };
+  case 'FINNISH_EXPENSE_EDITION': {
+    const { newInfos, editor } = payload;
+    const { idToEdit, expenses } = state;
+    const newExpenses = expenses.map((expense) => {
+      if (idToEdit === expense.id) return { ...expense, ...newInfos };
+      return expense;
+    });
+    return { ...state, editor, expenses: newExpenses };
+  }
   default:
     return state;
   }
