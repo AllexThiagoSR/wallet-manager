@@ -17,6 +17,21 @@ class WalletForm extends Component {
     tag: tags[0],
   };
 
+  componentDidUpdate(_prevProps, prevState) {
+    const { edit, editor } = this.props;
+    if (!this.checkObjectEquality(prevState, edit) && editor) {
+      this.setState({
+        ...edit,
+      });
+    }
+  }
+
+  checkObjectEquality = (obj1, obj2) => {
+    const entries1 = Object.entries(obj1);
+
+    return entries1.every((entrie) => entrie[1] === obj2[entrie[0]]);
+  };
+
   handleChange = ({ target: { value, name } }) => this.setState({
     [name]: value,
   });
@@ -106,10 +121,11 @@ class WalletForm extends Component {
   }
 }
 
-const mapStateToProps = ({ wallet: { currencies, expenses, editor } }) => ({
+const mapStateToProps = ({ wallet: { currencies, expenses, editor }, edit }) => ({
   currencies,
   expenses,
   editor,
+  edit,
 });
 
 WalletForm.propTypes = {
@@ -124,6 +140,13 @@ WalletForm.propTypes = {
     tag: PropTypes.string,
   })).isRequired,
   editor: PropTypes.bool.isRequired,
+  edit: PropTypes.shape({
+    value: PropTypes.string,
+    description: PropTypes.string,
+    currency: PropTypes.string,
+    method: PropTypes.string,
+    tag: PropTypes.string,
+  }).isRequired,
 };
 
 export default connect(mapStateToProps)(WalletForm);
