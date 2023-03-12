@@ -1,3 +1,5 @@
+import { getCurrencies } from '../../services/currenciesAPI';
+
 const SAVE_EMAIL = 'SAVE_EMAIL';
 
 export const saveEmailAction = (payload) => ({
@@ -13,7 +15,7 @@ const getCurrenciesAction = (currencies) => ({
 });
 
 export const fetchCurrencies = () => async (dispatch) => {
-  const currencies = await (await fetch('https://economia.awesomeapi.com.br/json/all')).json();
+  const currencies = await getCurrencies();
   const currenciesArray = Object.keys(currencies)
     .reduce((acc, curr) => (
       acc.includes(curr) || curr === 'USDT' ? acc : [...acc, curr]
@@ -29,7 +31,7 @@ const addExpenseAction = (expense) => ({
 });
 
 export const saveExpense = (expense) => async (dispatch) => {
-  const exchangeRates = await (await fetch('https://economia.awesomeapi.com.br/json/all')).json();
+  const exchangeRates = await getCurrencies();
   dispatch(addExpenseAction({ ...expense, exchangeRates }));
 };
 

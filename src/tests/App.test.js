@@ -5,7 +5,20 @@ import App from '../App';
 import mockData from './helpers/mockData';
 import { renderWithRouterAndRedux } from './helpers/renderWith';
 
+const mockFetch = () => Promise.resolve({
+  status: 200,
+  ok: true,
+  json: () => Promise.resolve(mockData),
+});
+
 const testEmail = 'teste@gmail.com';
+const edit = {
+  value: '10',
+  description: 'dez dólares',
+  currency: 'USD',
+  method: 'Dinheiro',
+  tag: 'Alimentação',
+};
 const expenses = [
   {
     id: 0,
@@ -61,7 +74,7 @@ const initialState = {
   },
 };
 
-describe('Testa a página de Login', () => {
+describe('Testa o App', () => {
   test('Teste: Os elementos da página inicial estão na página', () => {
     renderWithRouterAndRedux(<App />);
     const emailInput = screen.getByPlaceholderText('Email:');
@@ -104,12 +117,12 @@ describe('Testa a página de Login', () => {
     userEvent.type(passwordInput, '123456');
     userEvent.click(sendButton);
 
-    const descInput = screen.getByLabelText('Descrição:');
-    const valueInput = screen.getByLabelText('Valor:');
-    const coinSelect = screen.getByLabelText('Moeda:');
-    const methodSelect = screen.getByLabelText('Método de pagamento:');
-    const tagSelect = screen.getByLabelText('Categoria:');
-    const addExpenseButton = screen.getByRole('button', { name: 'Adicionar Despesa' });
+    const descInput = screen.getByLabelText(/Descrição:/);
+    const valueInput = screen.getByLabelText(/Valor:/);
+    const coinSelect = screen.getByLabelText(/Moeda:/);
+    const methodSelect = screen.getByLabelText(/Método de pagamento:/);
+    const tagSelect = screen.getByLabelText(/Categoria:/);
+    const addExpenseButton = screen.getByRole('button', { name: /Adicionar Despesa/ });
 
     expect(history.location.pathname).toBe('/carteira');
     expect(screen.getByText(testEmail)).toBeInTheDocument();
@@ -140,15 +153,13 @@ describe('Testa a página de Login', () => {
   });
 
   test('Teste: Se é possível excluir e adicionar despesas', async () => {
+    global.fetch = jest.fn(mockFetch);
+
     const { store } = renderWithRouterAndRedux(<App />, { initialState });
     const emailInput = screen.getByPlaceholderText('Email:');
     const passwordInput = screen.getByPlaceholderText('Password:');
     const sendButton = screen.getByRole('button', { name: 'Entrar' });
     const dataTestId = 'total-field';
-
-    global.fetch = jest.fn(async () => ({
-      json: async () => mockData,
-    }));
 
     userEvent.type(emailInput, testEmail);
     userEvent.type(passwordInput, '123456');
@@ -176,14 +187,56 @@ describe('Testa a página de Login', () => {
     userEvent.selectOptions(coinSelect, expenses[1].currency);
     userEvent.selectOptions(methodSelect, expenses[1].method);
     userEvent.selectOptions(tagSelect, expenses[1].tag);
+
     act(() => {
       userEvent.click(addExpenseButton);
     });
+
     await waitFor(() => {
       screen.getByText('5 dólares canadenses');
     });
+
     expect(store.getState().wallet.expenses).toEqual(expenses);
     expect(screen.getByTestId(dataTestId)).toHaveTextContent('66.31');
-    screen.logTestingPlaygroundURL();
+  });
+
+  test('Teste: Se ao clicar em um dos botões de edição as informações correspondentes populam os inputs', () => {
+    global.fetch = jest.fn(mockFetch);
+    const { store } = renderWithRouterAndRedux(<App />, { initialState });
+    const emailInput = screen.getByPlaceholderText('Email:');
+    const passwordInput = screen.getByPlaceholderText('Password:');
+    const sendButton = screen.getByRole('button', { name: 'Entrar' });
+
+    userEvent.type(emailInput, testEmail);
+    userEvent.type(passwordInput, '123456');
+    userEvent.click(sendButton);
+
+    const descInput = screen.getByLabelText('Descrição:');
+    const valueInput = screen.getByLabelText('Valor:');
+    const coinSelect = screen.getByLabelText('Moeda:');
+    const methodSelect = screen.getByLabelText('Método de pagamento:');
+    const tagSelect = screen.getByLabelText('Categoria:');
+
+    const editButtons = screen.getAllByRole('button', { name: 'Editar' });
+
+    act(() => {
+      userEvent.click(editButtons[0]);
+    });
+
+    expect(store.getState().edit).toEqual(edit);
+    expect(descInput).toHaveValue(edit.description);
+    expect(valueInput).toHaveValue(Number(edit.value));
+    expect(coinSelect).toHaveValue(edit.currency);
+    expect(methodSelect).toHaveValue(edit.method);
+    expect(tagSelect).toHaveValue(edit.tag);
+
+    userEvent.clear(valueInput);
+    userEvent.type(valueInput, '200');
+
+    act(() => {
+      userEvent.click(screen.getByRole('button', { name: /Editar Despesa/i }));
+    });
+
+    expect(screen.getByText('200.00')).toBeInTheDocument();
   });
 });
