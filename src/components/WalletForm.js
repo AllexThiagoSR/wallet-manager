@@ -68,7 +68,6 @@ class WalletForm extends Component {
     const { dispatch } = this.props;
     const { value, description, currency, method, tag } = this.state;
     dispatch(finnishExpenseEdition({ value, description, currency, method, tag }));
-    this.setState({ first: true });
     this.reset();
   };
 
