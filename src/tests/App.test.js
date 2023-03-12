@@ -1,5 +1,6 @@
-import { screen } from '@testing-library/react';
+import { screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { act } from 'react-dom/test-utils';
 import App from '../App';
 import mockData from './helpers/mockData';
 import { renderWithRouterAndRedux } from './helpers/renderWith';
@@ -122,11 +123,28 @@ describe('Testa a página de Login', () => {
     expect(addExpenseButton).toBeInTheDocument();
   });
 
-  test('Teste: Se os elementos da página de login estão na página', () => {
+  test('Teste: Se as informações do header são renderizadas de acordo com o state global', () => {
     const { history } = renderWithRouterAndRedux(<App />, { initialState });
     const emailInput = screen.getByPlaceholderText('Email:');
     const passwordInput = screen.getByPlaceholderText('Password:');
     const sendButton = screen.getByRole('button', { name: 'Entrar' });
+
+    userEvent.type(emailInput, testEmail);
+    userEvent.type(passwordInput, '123456');
+    userEvent.click(sendButton);
+
+    expect(history.location.pathname).toBe('/carteira');
+    expect(screen.getByText(testEmail)).toBeInTheDocument();
+    expect(screen.getByText('66.31')).toBeInTheDocument();
+    expect(screen.getAllByText('BRL')[0]).toBeInTheDocument();
+  });
+
+  test('Teste: Se é possível excluir e adicionar despesas', async () => {
+    const { store } = renderWithRouterAndRedux(<App />, { initialState });
+    const emailInput = screen.getByPlaceholderText('Email:');
+    const passwordInput = screen.getByPlaceholderText('Password:');
+    const sendButton = screen.getByRole('button', { name: 'Entrar' });
+    const dataTestId = 'total-field';
 
     global.fetch = jest.fn(async () => ({
       json: async () => mockData,
@@ -136,11 +154,36 @@ describe('Testa a página de Login', () => {
     userEvent.type(passwordInput, '123456');
     userEvent.click(sendButton);
 
-    screen.logTestingPlaygroundURL();
+    const descInput = screen.getByLabelText('Descrição:');
+    const valueInput = screen.getByLabelText('Valor:');
+    const coinSelect = screen.getByLabelText('Moeda:');
+    const methodSelect = screen.getByLabelText('Método de pagamento:');
+    const tagSelect = screen.getByLabelText('Categoria:');
+    const addExpenseButton = screen.getByRole('button', { name: 'Adicionar Despesa' });
 
-    expect(history.location.pathname).toBe('/carteira');
-    expect(screen.getByText(testEmail)).toBeInTheDocument();
-    expect(screen.getByText('66.31')).toBeInTheDocument();
-    expect(screen.getAllByText('BRL')[0]).toBeInTheDocument();
+    const deleteButtons = screen.getAllByRole('button', { name: 'Excluir' });
+    act(() => {
+      userEvent.click(deleteButtons[1]);
+    });
+
+    expect(deleteButtons[1]).not.toBeInTheDocument();
+    expect(screen.getByTestId(dataTestId)).toBeInTheDocument();
+    expect(screen.getByTestId(dataTestId)).toHaveTextContent('47.53');
+    expect(store.getState().wallet.expenses).toEqual([expenses[0]]);
+
+    userEvent.type(descInput, expenses[1].description);
+    userEvent.type(valueInput, expenses[1].value);
+    userEvent.selectOptions(coinSelect, expenses[1].currency);
+    userEvent.selectOptions(methodSelect, expenses[1].method);
+    userEvent.selectOptions(tagSelect, expenses[1].tag);
+    act(() => {
+      userEvent.click(addExpenseButton);
+    });
+    await waitFor(() => {
+      screen.getByText('5 dólares canadenses');
+    });
+    expect(store.getState().wallet.expenses).toEqual(expenses);
+    expect(screen.getByTestId(dataTestId)).toHaveTextContent('66.31');
+    screen.logTestingPlaygroundURL();
   });
 });
