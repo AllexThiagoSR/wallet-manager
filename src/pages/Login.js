@@ -27,45 +27,47 @@ class Login extends React.Component {
     const minLength = 6;
     return (
       <div className="login-page">
-        <img src={ logo } alt="TrybeWallet Logo" />
-        <form
-          onSubmit={ (e) => {
-            e.preventDefault();
-            const { history: { push }, dispatch } = this.props;
-            dispatch(saveEmailAction(email));
-            push('/carteira');
-          } }
-        >
-          <label htmlFor="email-input">
-            <input
-              type="email"
-              name="email"
-              data-testid="email-input"
-              id="-email-input"
-              placeholder="Email:"
-              value={ email }
-              onChange={ this.handlerChange }
-            />
-          </label>
-          <label htmlFor="password-input">
-            <input
-              id="password-input"
-              data-testid="password-input"
-              name="password"
-              value={ password }
-              type="password"
-              placeholder="Password:"
-              onChange={ this.handlerChange }
-            />
-          </label>
-          <button
-            disabled={
-              !(this.emailIsValid(email) && this.passwordIsValid(password, minLength))
-            }
+        <main className="main-content">
+          <img src={ logo } alt="TrybeWallet Logo" />
+          <form
+            onSubmit={ (e) => {
+              e.preventDefault();
+              const { history: { push }, dispatch } = this.props;
+              dispatch(saveEmailAction(email));
+              push('/carteira');
+            } }
           >
-            Entrar
-          </button>
-        </form>
+            <label htmlFor="email-input">
+              <input
+                type="email"
+                name="email"
+                data-testid="email-input"
+                id="-email-input"
+                placeholder="Email:"
+                value={ email }
+                onChange={ this.handlerChange }
+              />
+            </label>
+            <label htmlFor="password-input">
+              <input
+                id="password-input"
+                data-testid="password-input"
+                name="password"
+                value={ password }
+                type="password"
+                placeholder="Password:"
+                onChange={ this.handlerChange }
+              />
+            </label>
+            <button
+              disabled={
+                !(this.emailIsValid(email) && this.passwordIsValid(password, minLength))
+              }
+            >
+              Entrar
+            </button>
+          </form>
+        </main>
       </div>
     );
   }
