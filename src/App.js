@@ -15,12 +15,10 @@ class App extends Component {
 
   render() {
     return (
-      <main className="main-container">
-        <Switch>
-          <Route path="/carteira" component={ Wallet } />
-          <Route exact path="/" component={ Login } />
-        </Switch>
-      </main>
+      <Switch>
+        <Route path="/carteira" component={ Wallet } />
+        <Route exact path="/" component={ Login } />
+      </Switch>
     );
   }
 }

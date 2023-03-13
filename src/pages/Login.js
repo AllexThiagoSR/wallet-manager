@@ -2,6 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { saveEmailAction } from '../redux/actions';
+import '../styles/Login.css';
+import logo from '../imgs/logoTrybeWallet.png';
 
 class Login extends React.Component {
   state = {
@@ -25,6 +27,7 @@ class Login extends React.Component {
     const minLength = 6;
     return (
       <div className="login-page">
+        <img src={ logo } alt="TrybeWallet Logo" />
         <form
           onSubmit={ (e) => {
             e.preventDefault();
