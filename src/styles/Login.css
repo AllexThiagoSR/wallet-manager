@@ -26,4 +26,12 @@
 form {
   display: flex;
   flex-direction: column;
+  width: 330px;
+}
+
+input {
+  border: 1px solid #003be5;
+  margin: 0;
+  padding: 13px 15px;
+  width: 298px;
 }

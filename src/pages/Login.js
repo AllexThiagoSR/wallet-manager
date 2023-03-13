@@ -37,28 +37,24 @@ class Login extends React.Component {
               push('/carteira');
             } }
           >
-            <label htmlFor="email-input">
-              <input
-                type="email"
-                name="email"
-                data-testid="email-input"
-                id="-email-input"
-                placeholder="Email:"
-                value={ email }
-                onChange={ this.handlerChange }
-              />
-            </label>
-            <label htmlFor="password-input">
-              <input
-                id="password-input"
-                data-testid="password-input"
-                name="password"
-                value={ password }
-                type="password"
-                placeholder="Password:"
-                onChange={ this.handlerChange }
-              />
-            </label>
+            <input
+              type="email"
+              name="email"
+              data-testid="email-input"
+              id="-email-input"
+              placeholder="Email:"
+              value={ email }
+              onChange={ this.handlerChange }
+            />
+            <input
+              id="password-input"
+              data-testid="password-input"
+              name="password"
+              value={ password }
+              type="password"
+              placeholder="Password:"
+              onChange={ this.handlerChange }
+            />
             <button
               disabled={
                 !(this.emailIsValid(email) && this.passwordIsValid(password, minLength))
