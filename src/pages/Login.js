@@ -30,6 +30,7 @@ class Login extends React.Component {
         <main className="main-content">
           <img src={ logo } alt="TrybeWallet Logo" />
           <form
+            className="login-form"
             onSubmit={ (e) => {
               e.preventDefault();
               const { history: { push }, dispatch } = this.props;
@@ -38,6 +39,7 @@ class Login extends React.Component {
             } }
           >
             <input
+              className="login-input"
               type="email"
               name="email"
               data-testid="email-input"
@@ -47,6 +49,7 @@ class Login extends React.Component {
               onChange={ this.handlerChange }
             />
             <input
+              className="login-input"
               id="password-input"
               data-testid="password-input"
               name="password"
@@ -56,6 +59,7 @@ class Login extends React.Component {
               onChange={ this.handlerChange }
             />
             <button
+              className="login-button"
               disabled={
                 !(this.emailIsValid(email) && this.passwordIsValid(password, minLength))
               }

@@ -30,6 +30,7 @@ class WalletForm extends Component {
 
   checkObjectEquality = (obj1, obj2) => {
     const entries1 = Object.entries(obj1);
+    console.log(entries1);
 
     return entries1.every((entrie) => entrie[1] === obj2[entrie[0]]);
   };
