@@ -1,0 +1,25 @@
+.header {
+  align-items: flex-end;
+  color: rgb(0, 59, 229);
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 47px;
+  margin-top: 97px;
+}
+
+.total-expenses {
+  align-items: center;
+  display: flex;
+  justify-content: space-evenly;
+  min-width: 270px;
+}
+
+.email {
+  color: rgb(47, 193, 140);
+  margin: 0;
+}
+
+.header-logo {
+  height: 52px;
+  width: 250px;
+}

@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import logo from '../imgs/logoTrybeWallet.png';
+import coins from '../imgs/coinsImage.png';
+import '../styles/Header.css';
 
 class Header extends Component {
   render() {
@@ -10,14 +13,16 @@ class Header extends Component {
       return acc + (parseFloat(value) * parseFloat(exchangeRates[currency].ask));
     }, 0);
     return (
-      <header>
-        <p data-testid="email-field">{ email }</p>
-        <p>
-          R$
-          {' '}
-          <span data-testid="total-field">{ totalValue.toFixed(2) }</span>
-        </p>
-        <p data-testid="header-currency-field">BRL</p>
+      <header className="header">
+        <img src={ logo } alt="TrybeWallet Logo" className="header-logo" />
+        <div className="total-expenses">
+          <img src={ coins } alt="Coins" />
+          <span data-testid="total-field">
+            { `Total de despesas: ${totalValue.toFixed(2)}` }
+          </span>
+          <span data-testid="header-currency-field">BRL</span>
+        </div>
+        <p data-testid="email-field" className="email">{ email }</p>
       </header>
     );
   }

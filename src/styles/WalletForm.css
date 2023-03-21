@@ -1,0 +1,51 @@
+.expense-form {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+}
+
+.expense-inputs {
+  align-items: center;
+  color: rgb(0, 59, 229);
+  display: flex;
+  flex-wrap: wrap;
+  font-family: Epilogue, sans-serif;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 700;
+  height: 134px;
+  justify-content: space-between;
+  line-height: 14px;
+  width: 100%;
+}
+
+label {
+  display: flex;
+}
+
+.expense-form-button {
+  background: rgb(0, 59, 229);
+  border: 1px solid #003be5;
+  border-radius: 5px;
+  color: white;
+  cursor: pointer;
+  font-family: ' Epilogue', sans-serif;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 700;
+  height: 40px;
+  line-height: 14px;
+  margin-top: 28px;
+  width: 330px;
+}
+
+.expense-form-button:active {
+  background-color: rgba(0, 59, 229, 0.75);
+  border-color: rgba(0, 59, 229, 0.75);
+}
+
+.expense-form-button:disabled {
+  background-color: rgba(239, 239, 239, 0.3);
+  border-color: rgba(0, 59, 229, 0.3);
+  color: rgba(0, 59, 229, 0.3);
+}
